@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+
+=Felis Database Designer=
+
+Felis, veritabanı tasarlama aracıdır. Görsel olarak tablolarınız arasında kolayca ilişki verebilir, tablolar üzerinde değişiklik yapabilir, tablolara değişik renkler atayarak projenizi daha kolay yönetebilirsiniz.
+
+Java tabanlı olarak yazılmaktadır. Bileşenler Java2D api kullanılarak hazırlanmıştır. Hazırlanan diyagram şemasını xml olarak kayıt eder. 
+
+
+=Desteklenecek Veritabanları=
+
+ *MySQL
+ *Oracle [YAPIM AŞAMASINDA]
+ *MSSQL  [YAPIM AŞAMASINDA]
