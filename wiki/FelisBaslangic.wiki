@@ -10,5 +10,5 @@ Java tabanlı olarak yazılmaktadır. Bileşenler Java2D api kullanılarak hazı
 =Desteklenecek Veritabanları=
 
  *MySQL
- *Oracle [YAPIM AŞAMASINDA]
- *MSSQL  [YAPIM AŞAMASINDA]
+ *Oracle - YAPIM AŞAMASINDA
+ *MSSQL  - YAPIM AŞAMASINDA
