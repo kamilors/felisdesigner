@@ -5,11 +5,13 @@
 
 package com.vizyon.felis.core;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  *
@@ -23,14 +25,17 @@ public class Box {
     private int height;
     private Color bgColor;
     private RectangularShape shape;
-
+    private int round;
+    private boolean fill;
 
     public Box() {
-        left = 0;
-        top = 0;
-        width = 100;
+        round = 0;
+        left = 20;
+        top = 20;
+        width = 150;
         height = 100;
         bgColor = new Color(33, 33, 33);
+        fill = true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Getter And Setter">
@@ -73,12 +78,45 @@ public class Box {
     public void setWidth(int width) {
         this.width = width;
     }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public RectangularShape getShape() {
+        return shape;
+    }
+
+    public void setShape(RectangularShape shape) {
+        this.shape = shape;
+    }
+
+    public boolean isFill() {
+        return fill;
+    }
+
+    public void setFill(boolean fill) {
+        this.fill = fill;
+    }
+
+
+
     // </editor-fold>
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(bgColor);
-        shape = new Rectangle2D.Double(left, top, width, height);
-        g2.fill(shape);
+        shape = new RoundRectangle2D.Double(left, top, width, height,round,round);
+        if(fill) {
+            g2.fill(shape);
+        }
+        else {
+            g2.setStroke(new BasicStroke(new Float(2)));
+            g2.draw(shape);
+        }
     }
 }
