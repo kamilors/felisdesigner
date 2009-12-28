@@ -12,6 +12,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,7 +90,7 @@ public class Table {
     // </editor-fold>
 
     public void draw(Graphics g) {
-        Graphics g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D) g;
         Font font = new Font("Tahoma", Font.BOLD, 12);
 
         if(!closed) {
@@ -120,9 +121,9 @@ public class Table {
             select.draw(g);
         }
 
-        g.setColor(Color.white);
+        g2.setColor(Color.white);
         g2.setFont(font);
-        
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2.drawString(name, box.getLeft()+5, box.getTop()+15);
 
 
@@ -160,10 +161,10 @@ public class Table {
             index++;
         }
 
-        widths = FelisUtil.sorting(widths, false);
+        widths = FelisUtil.sorting(widths, true);
         
 
-        return widths[widths.length-1];
+        return widths[0];
     }
 
     

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 /**
  *
@@ -58,7 +59,8 @@ public class Field {
         Graphics2D g2 = (Graphics2D) g;
         box.draw(g);
 
-        g.setColor(Color.black);
+        g2.setColor(Color.black);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         g2.drawString(name+" - " + type, box.getLeft()+5, box.getTop()+15);
     }
