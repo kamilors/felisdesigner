@@ -5,48 +5,71 @@
 
 package com.vizyon.felis.core;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Kamil ÖRS
  */
 public class FieldType {
 
+    public static int TYPE_SIZE = 8;
     public static int INTEGER_TYPE = 0;
     public static int FLOAT_TYPE = 1;
     public static int DOUBLE_TYPE = 2;
     public static int LONG_TYPE = 3;
     public static int BOOLEAN_TYPE = 4;
     public static int VARCHAR_TYPE = 5;
+    public static int BLOB_TYPE = 6;
+    public static int NUMBER_TYPE = 7;
 
-    private String name;
+    private int type;
     private int value;
-    private boolean notNull;
-    private boolean autoIncrement;
+
+    private static String[] TYPE_LABELS = {
+        "INTEGER",
+        "FLOAT",
+        "DOUBLE",
+        "LONG",
+        "BOOLEAN",
+        "VARCHAR",
+        "BLOB",
+        "NUMBER"
+    };
 
     public FieldType() {
-        notNull = true;
-        autoIncrement = false;
         value = 0;
-        name = "varchar";
+        type = VARCHAR_TYPE;
     }
     
-    public FieldType(String name, int value) {
+    public FieldType(int type, int value) {
         this();
-        this.name = name;
+        this.type = type;
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return name + "(" + value + ")";
+        return typeName(type);
     }
 
-    public String getName() {
-        return name;
+    public String toFormatString() {
+        if(type == VARCHAR_TYPE) {
+            return typeName(VARCHAR_TYPE) + "(" + value + ")";
+        }
+        else {
+            return typeName(type);
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getValue() {
@@ -57,22 +80,27 @@ public class FieldType {
         this.value = value;
     }
 
-    public boolean isAutoIncrement() {
-        return autoIncrement;
+    public static String typeName(int type) {
+        return TYPE_LABELS[type];
     }
 
-    public void setAutoIncrement(boolean autoIncrement) {
-        this.autoIncrement = autoIncrement;
+    public static int typeInt(String name) {
+        for(int i = 0; i<TYPE_SIZE; i++) {
+            if(TYPE_LABELS[i].equals(name)) {
+                return i;
+            }
+        }
+
+        return 0;
     }
 
-    public boolean isNotNull() {
-        return notNull;
+    public static FieldType[] types() {
+        FieldType[] types = new FieldType[TYPE_SIZE];
+        for(int i = 0; i < TYPE_SIZE; i++) {
+            types[i] = new FieldType();
+            types[i].setType(i);
+            types[i].setValue(0);
+        }
+        return types;
     }
-
-    public void setNotNull(boolean notNull) {
-        this.notNull = notNull;
-    }
-
-    
-
 }
