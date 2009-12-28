@@ -5,7 +5,7 @@
 
 package com.vizyon.felis.core;
 
-import com.sun.org.apache.bcel.internal.generic.F2D;
+import com.vizyon.felis.util.FelisUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -13,8 +13,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import sun.font.FontDesignMetrics;
 
 /**
  *
@@ -90,12 +90,21 @@ public class Table {
 
     public void draw(Graphics g) {
         Graphics g2 = (Graphics2D) g;
+        Font font = new Font("Tahoma", Font.BOLD, 12);
+
         if(!closed) {
             box.setHeight(getFieldsHeight() + 30);
         }
         else {
             box.setHeight(30);
         }
+
+        int maxWidt = getMaxWidth(g,font);
+
+        if(maxWidt > 150) {
+            box.setWidth(maxWidt);
+        }
+
         box.draw(g);
 
         if(isSelected()) {
@@ -112,7 +121,7 @@ public class Table {
         }
 
         g.setColor(Color.white);
-        g2.setFont(new Font("Tahoma", Font.BOLD, 12));
+        g2.setFont(font);
         
         g2.drawString(name, box.getLeft()+5, box.getTop()+15);
 
@@ -136,4 +145,26 @@ public class Table {
         }
         return height;
     }
+
+    private int getMaxWidth(Graphics g, Font font) {
+        Graphics2D g2 = (Graphics2D) g;
+        int[] widths = new int[this.fields.size() + 2];
+        FontMetrics metrics = g2.getFontMetrics(font);
+
+        widths[0] = metrics.stringWidth(getName()) + 20;
+
+        int index = 1;
+        for(Field field: fields) {
+            String label = field.getName() + " - " + field.getType().getName() + "(" + field.getType().getValue() + ")";
+            widths[index] = metrics.stringWidth(label);
+            index++;
+        }
+
+        widths = FelisUtil.sorting(widths, false);
+        
+
+        return widths[widths.length-1];
+    }
+
+    
 }

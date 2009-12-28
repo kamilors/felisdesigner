@@ -179,7 +179,6 @@ public class Screen extends JPanel {
                     AddNewTableDialog tableDialog = new AddNewTableDialog(null, true);
                     Table table = tableDialog.createNewTable();
                     tables.add(table);
-                    System.out.println("Menuye Geri Dondu");
                     reloadScreen();
                 }
             });
