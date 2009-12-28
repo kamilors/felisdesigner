@@ -17,14 +17,14 @@ public class FelisUtil {
      * @param asc boolean
      * @return int[]
      */
-    public static int[] sorting(int[] arry, boolean asc) {
+    public static int[] sorting(int[] arry, boolean desc) {
 
         int temp,sort;
         for(int i = 0; i < arry.length-1; i++) {
             sort = i;
             for(int j = i; j < arry.length; j++) {
 
-                if(asc) {
+                if(desc) {
                     if(arry[j] > arry[sort]) {
                         sort = j;
                     }
