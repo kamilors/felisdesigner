@@ -5,7 +5,6 @@
 
 package com.vizyon.felis.core;
 
-import com.vizyon.felis.util.FelisUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

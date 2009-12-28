@@ -11,6 +11,13 @@ package com.vizyon.felis.core;
  */
 public class FieldType {
 
+    public static int INTEGER_TYPE = 0;
+    public static int FLOAT_TYPE = 1;
+    public static int DOUBLE_TYPE = 2;
+    public static int LONG_TYPE = 3;
+    public static int BOOLEAN_TYPE = 4;
+    public static int VARCHAR_TYPE = 5;
+
     private String name;
     private int value;
     private boolean notNull;
