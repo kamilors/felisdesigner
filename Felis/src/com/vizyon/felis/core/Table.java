@@ -161,10 +161,10 @@ public class Table {
             index++;
         }
 
-        widths = FelisUtil.sorting(widths, true);
+        Arrays.sort(widths);
         
 
-        return widths[0];
+        return widths[widths.length-1];
     }
 
     

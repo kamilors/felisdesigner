@@ -33,7 +33,7 @@ public class Box {
         top = 20;
         width = 150;
         height = 100;
-        bgColor = new Color(33, 33, 33);
+        bgColor = new Color(255, 173, 0);
         fill = true;
     }
 
