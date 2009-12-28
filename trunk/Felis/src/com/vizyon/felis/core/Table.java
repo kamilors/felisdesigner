@@ -91,6 +91,8 @@ public class Table {
 
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         Font font = new Font("Tahoma", Font.BOLD, 12);
 
         if(!closed) {
@@ -123,7 +125,6 @@ public class Table {
 
         g2.setColor(Color.white);
         g2.setFont(font);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2.drawString(name, box.getLeft()+5, box.getTop()+15);
 
 
