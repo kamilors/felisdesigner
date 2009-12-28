@@ -28,6 +28,7 @@ public class Table {
     public Point dragDrop = new Point();
     private boolean selected;
     private boolean closed;
+    private boolean autoSize;
 
     public Table() {
         fields = new ArrayList<Field>(0);
@@ -35,6 +36,7 @@ public class Table {
         box.setRound(10);
         box.setBgColor(Color.orange);
         name = "table";
+        autoSize = true;
         selected = false;
         closed = false;
     }

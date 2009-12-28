@@ -11,7 +11,7 @@ import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,8 +19,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -218,6 +221,19 @@ public class Screen extends JPanel {
         repaint();
     }
 
+    public void saveToPng() {
+        try {
+            File file = new File("/home/kamil/Desktop/felis.png");
+            BufferedImage bi = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = bi.createGraphics();
+            paint(g2);
+            ImageIO.write(bi, "png", file);
+        }
+        catch(Exception e) {
+            System.out.println("HATA: " + e.getMessage());
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Popup Menu">
     private class Menu extends JPopupMenu {
 
@@ -282,6 +298,7 @@ public class Screen extends JPanel {
             JMenuItem reload = new JMenuItem("Yenile");
             reload.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
+                    saveToPng();
                     reloadScreen();
                 }
             });
