@@ -17,6 +17,8 @@ import com.vizyon.felis.core.Table;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -60,20 +62,27 @@ public class TableEditDialog extends javax.swing.JDialog {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableFleids = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Tablo Düzenle");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Tablo Adı :");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Renk :");
 
         textTableColor.setEditable(false);
+        textTableColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textTableColorMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,14 +90,14 @@ public class TableEditDialog extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textTableColor, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addComponent(textTableName, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textTableColor, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,28 +105,62 @@ public class TableEditDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(textTableName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(textTableColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textTableName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textTableColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tableFleids.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Birincil Anahtar", "Alan Adı", "Alan Tipi", "Boş Bırakılabilinir", "Otomatik Artan Sayı"
+                "Key", "Adı", "Tip", "Uzunluk", "NN", "AI"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tableFleids);
+        tableFleids.getColumnModel().getColumn(0).setMinWidth(30);
+        tableFleids.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tableFleids.getColumnModel().getColumn(0).setMaxWidth(30);
+        tableFleids.getColumnModel().getColumn(2).setMinWidth(125);
+        tableFleids.getColumnModel().getColumn(2).setPreferredWidth(125);
+        tableFleids.getColumnModel().getColumn(2).setMaxWidth(125);
+        tableFleids.getColumnModel().getColumn(3).setMinWidth(75);
+        tableFleids.getColumnModel().getColumn(3).setPreferredWidth(75);
+        tableFleids.getColumnModel().getColumn(3).setMaxWidth(75);
+        tableFleids.getColumnModel().getColumn(4).setMinWidth(30);
+        tableFleids.getColumnModel().getColumn(4).setPreferredWidth(30);
+        tableFleids.getColumnModel().getColumn(4).setMaxWidth(30);
+        tableFleids.getColumnModel().getColumn(5).setMinWidth(30);
+        tableFleids.getColumnModel().getColumn(5).setPreferredWidth(30);
+        tableFleids.getColumnModel().getColumn(5).setMaxWidth(30);
 
         jTabbedPane1.addTab("Tablo Alanları", jScrollPane1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 481, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 132, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Tablo İlişkileri", jPanel2);
 
         jButton1.setText("Tamam");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -140,11 +183,11 @@ public class TableEditDialog extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 320, Short.MAX_VALUE)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -154,7 +197,7 @@ public class TableEditDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -169,11 +212,12 @@ public class TableEditDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tableFleids.getModel();
 
         Vector vector = new Vector();
-        vector.add("");
+        vector.add(false);
         vector.add("alan_adi");
-        vector.add("varchar");
-        vector.add("");
-        vector.add("");
+        vector.add(FieldType.typeName(FieldType.VARCHAR_TYPE));
+        vector.add(0);
+        vector.add(false);
+        vector.add(false);
 
         model.addRow(vector);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -183,12 +227,23 @@ public class TableEditDialog extends javax.swing.JDialog {
        table.setFields(new ArrayList<Field>(0));
        for(int i = 0; i < model.getRowCount(); i++) {
            Field field = new Field();
+           field.setPrimaryKey(new Boolean(model.getValueAt(i, 0).toString()));
            field.setName(model.getValueAt(i, 1).toString());
-           field.setType(new FieldType(model.getValueAt(i, 2).toString(), 0));
+           field.setType(new FieldType(FieldType.typeInt(model.getValueAt(i, 2).toString()), new Integer(model.getValueAt(i, 3).toString())));
+           field.setNotNull(new Boolean(model.getValueAt(i, 4).toString()));
+           field.setAutoIncrement(new Boolean(model.getValueAt(i, 5).toString()));
            table.getFields().add(field);
        }
+
+       table.setName(textTableName.getText());
+       table.getBox().setBgColor(textTableColor.getBackground());
        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void textTableColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textTableColorMouseClicked
+        Color color = JColorChooser.showDialog(rootPane, null, textTableColor.getBackground());
+        textTableColor.setBackground(color);
+    }//GEN-LAST:event_textTableColorMouseClicked
 
     /**
     * @param args the command line arguments
@@ -213,6 +268,7 @@ public class TableEditDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tableFleids;
@@ -227,11 +283,14 @@ public class TableEditDialog extends javax.swing.JDialog {
 
         for(Field field : table.getFields()) {
             Vector vector = new Vector();
-            vector.add("");
+            vector.add(field.isPrimaryKey());
             vector.add(field.getName());
-            vector.add(field.getType().getName());
-            vector.add("");
-            vector.add("");
+            vector.add(FieldType.typeName(field.getType().getType()));
+            vector.add(field.getType().getValue());
+            vector.add(field.isNotNull());
+            vector.add(field.isAutoIncrement());
+
+            model.addRow(vector);
         }
     }
 }

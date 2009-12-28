@@ -158,7 +158,7 @@ public class Table {
 
         int index = 1;
         for(Field field: fields) {
-            String label = field.getName() + " - " + field.getType().getName() + "(" + field.getType().getValue() + ")";
+            String label = field.getName() + " - " + field.getType().toFormatString();
             widths[index] = metrics.stringWidth(label);
             index++;
         }

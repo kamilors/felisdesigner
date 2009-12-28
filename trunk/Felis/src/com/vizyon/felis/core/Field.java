@@ -20,6 +20,9 @@ public class Field {
     private String name;
     private FieldType type;
     private Box box;
+    private boolean notNull;
+    private boolean autoIncrement;
+    private boolean primaryKey;
 
     public Field() {
         box = new Box();
@@ -27,6 +30,9 @@ public class Field {
         box.setHeight(20);
         box.setBgColor(Color.white);
         name = "field_name_long";
+        notNull = true;
+        autoIncrement = false;
+        primaryKey = false;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Getter And Setter">
@@ -53,6 +59,31 @@ public class Field {
     public void setType(FieldType type) {
         this.type = type;
     }
+
+    public boolean isAutoIncrement() {
+        return autoIncrement;
+    }
+
+    public void setAutoIncrement(boolean autoIncrement) {
+        this.autoIncrement = autoIncrement;
+    }
+
+    public boolean isNotNull() {
+        return notNull;
+    }
+
+    public void setNotNull(boolean notNull) {
+        this.notNull = notNull;
+    }
+
+    public boolean isPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(boolean primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
     //</editor-fold>
 
     public void draw(Graphics g) {
@@ -63,7 +94,7 @@ public class Field {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        g2.drawString(name+" - " + type, box.getLeft()+5, box.getTop()+15);
+        g2.drawString(name+" - " + type.toFormatString(), box.getLeft()+5, box.getTop()+15);
     }
 
 }
