@@ -101,8 +101,8 @@ public class Screen extends JPanel {
 
             public void mouseDragged(MouseEvent e) {
                 if(selectedTable != null) {
-                    if((e.getX() > 10 && e.getX() < getWidth() - 10) &&
-                            (e.getY() > 10 && e.getY() < getHeight() - 10)) {
+                    if((e.getX() >= 10 && e.getX() <= getWidth() - 10) &&
+                            (e.getY() >= 10 && e.getY() <= getHeight() - 10)) {
                         selectedTable.getBox().setLeft(e.getX() - selectedTable.dragDrop.x);
                         selectedTable.getBox().setTop(e.getY() - selectedTable.dragDrop.y);
                         repaint();
