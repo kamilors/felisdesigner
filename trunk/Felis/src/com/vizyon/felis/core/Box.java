@@ -102,6 +102,13 @@ public class Box {
         this.fill = fill;
     }
 
+    public int getRight() {
+        return width + left;
+    }
+
+    public int getBottom() {
+        return height + top;
+    }
 
 
     // </editor-fold>
