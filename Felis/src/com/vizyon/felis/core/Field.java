@@ -61,6 +61,7 @@ public class Field {
 
         g2.setColor(Color.black);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         g2.drawString(name+" - " + type, box.getLeft()+5, box.getTop()+15);
     }

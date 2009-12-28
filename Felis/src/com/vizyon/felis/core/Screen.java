@@ -11,9 +11,10 @@ import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -46,6 +47,7 @@ public class Screen extends JPanel {
         tables = new ArrayList<Table>(0);
         selectedTable = null;
         setComponentPopupMenu(new Menu());
+        setFocusable(true);
 
 
         // <editor-fold defaultstate="collapsed" desc="Mouse Listener">
@@ -103,6 +105,29 @@ public class Screen extends JPanel {
 
             public void mouseMoved(MouseEvent e) {
 
+            }
+        });
+        //</editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Key Listener">
+        addKeyListener(new KeyListener() {
+            public void keyTyped(KeyEvent ke) {
+            }
+
+            public void keyPressed(KeyEvent ke) {
+            }
+
+            public void keyReleased(KeyEvent ke) {
+                if(ke.getKeyCode() == KeyEvent.VK_F2) {
+                    if(selectedTable != null) {
+                        TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
+                        editDialog.setVisible(true);
+                        reloadScreen();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
+                    }
+                }
             }
         });
         //</editor-fold>
@@ -171,7 +196,6 @@ public class Screen extends JPanel {
 
         public Menu() {
             initMenu();
-
         }
 
         public void initMenu() {
@@ -224,7 +248,17 @@ public class Screen extends JPanel {
             selected.add(deleteTable);
 
             add(selected);
+
+            JMenuItem reload = new JMenuItem("Yenile");
+            reload.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    reloadScreen();
+                }
+            });
+
+            add(reload);
         }
     }
     //</editor-fold>
+
 }
