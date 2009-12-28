@@ -24,11 +24,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -223,11 +225,18 @@ public class Screen extends JPanel {
 
     public void saveToPng() {
         try {
-            File file = new File("/home/kamil/Desktop/felis.png");
-            BufferedImage bi = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2 = bi.createGraphics();
-            paint(g2);
-            ImageIO.write(bi, "png", file);
+            JFileChooser fc = new JFileChooser();
+            fc.setSelectedFile(new File("felisScreenShot.png"));
+            int status = fc.showSaveDialog(this);
+            
+            if(status == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                BufferedImage bi = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = bi.createGraphics();
+                paint(g2);
+                ImageIO.write(bi, "png", file);
+            }
+            
         }
         catch(Exception e) {
             System.out.println("HATA: " + e.getMessage());
@@ -295,10 +304,19 @@ public class Screen extends JPanel {
 
             add(selected);
 
+            JMenu export = new JMenu("Dışarı Aktar");
+            JMenuItem exportPng = new JMenuItem("PNG Formatı");
+            exportPng.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    saveToPng();
+                }
+            });
+            export.add(exportPng);
+            add(export);
+
             JMenuItem reload = new JMenuItem("Yenile");
             reload.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
-                    saveToPng();
                     reloadScreen();
                 }
             });
