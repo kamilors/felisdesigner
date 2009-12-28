@@ -27,6 +27,7 @@ public class Main {
         frame.setSize(new Dimension(800, 600));
         frame.add(new Screen());
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
