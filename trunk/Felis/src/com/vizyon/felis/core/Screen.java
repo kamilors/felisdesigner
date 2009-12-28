@@ -11,6 +11,7 @@ import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -35,7 +36,6 @@ public class Screen extends JPanel {
 
     public Screen() {
         initScreen();
-        tables.add(new Table("User"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="Initialize Screen">
@@ -92,9 +92,12 @@ public class Screen extends JPanel {
 
             public void mouseDragged(MouseEvent e) {
                 if(selectedTable != null) {
-                    selectedTable.getBox().setLeft(e.getX() - selectedTable.dragDrop.x);
-                    selectedTable.getBox().setTop(e.getY() - selectedTable.dragDrop.y);
-                    repaint();
+                    if((e.getX() > 10 && e.getX() < getWidth() - 10) &&
+                            (e.getY() > 10 && e.getY() < getHeight() - 10)) {
+                        selectedTable.getBox().setLeft(e.getX() - selectedTable.dragDrop.x);
+                        selectedTable.getBox().setTop(e.getY() - selectedTable.dragDrop.y);
+                        repaint();
+                    }
                 }
             }
 
@@ -178,7 +181,9 @@ public class Screen extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     AddNewTableDialog tableDialog = new AddNewTableDialog(null, true);
                     Table table = tableDialog.createNewTable();
-                    tables.add(table);
+                    if(table != null) {
+                        tables.add(table);
+                    }
                     reloadScreen();
                 }
             });

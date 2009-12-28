@@ -27,15 +27,14 @@ public class AddNewTableDialog extends javax.swing.JDialog {
     public AddNewTableDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        textTableColor.setBackground(new Color(33, 33, 33));
         setLocationByPlatform(true);
         setLocationRelativeTo(this);
+        table = null;
     }
 
     public Table createNewTable() {
-        table = new Table();
         setVisible(true);
-        table.setName(textTableName.getText());
-        table.getBox().setBgColor(textTableColor.getBackground());
         return table;
     }
 
@@ -136,6 +135,7 @@ public class AddNewTableDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        table = new Table();
         table.setName(textTableName.getText());
         table.getBox().setBgColor(textTableColor.getBackground());
         dispose();
