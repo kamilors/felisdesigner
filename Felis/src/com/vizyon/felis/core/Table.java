@@ -8,11 +8,13 @@ package com.vizyon.felis.core;
 import com.sun.org.apache.bcel.internal.generic.F2D;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import sun.font.FontDesignMetrics;
 
 /**
  *
@@ -25,6 +27,7 @@ public class Table {
     private List<Field> fields; // Tablo Alanları
     public Point dragDrop = new Point();
     private boolean selected;
+    private boolean closed;
 
     public Table() {
         fields = new ArrayList<Field>(0);
@@ -33,6 +36,7 @@ public class Table {
         box.setBgColor(Color.orange);
         name = "table";
         selected = false;
+        closed = false;
     }
 
     public Table(String name) {
@@ -72,11 +76,26 @@ public class Table {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+
     // </editor-fold>
 
     public void draw(Graphics g) {
         Graphics g2 = (Graphics2D) g;
-        box.setHeight(getFieldsHeight() + 30);
+        if(!closed) {
+            box.setHeight(getFieldsHeight() + 30);
+        }
+        else {
+            box.setHeight(30);
+        }
         box.draw(g);
 
         if(isSelected()) {
@@ -94,23 +113,26 @@ public class Table {
 
         g.setColor(Color.white);
         g2.setFont(new Font("Tahoma", Font.BOLD, 12));
+        
         g2.drawString(name, box.getLeft()+5, box.getTop()+15);
 
-        int top = 22;
 
-        for(Field field : fields) {
-            field.getBox().setTop(box.getTop() + top);
-            field.getBox().setLeft(box.getLeft() + 5);
-            field.getBox().setWidth(box.getWidth() - 10);
-            field.draw(g);
-            top += 21;
+        if(!closed) {
+            int top = 22;
+            for(Field field : fields) {
+                field.getBox().setTop(box.getTop() + top);
+                field.getBox().setLeft(box.getLeft() + 5);
+                field.getBox().setWidth(box.getWidth() - 10);
+                field.draw(g);
+                top += 21;
+            }
         }
     }
 
     private int getFieldsHeight() {
         int height = 0;
         for(Field field : fields) {
-            height += field.getBox().getHeight();
+            height += field.getBox().getHeight() + 1;
         }
         return height;
     }

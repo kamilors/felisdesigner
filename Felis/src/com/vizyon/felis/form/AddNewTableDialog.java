@@ -13,6 +13,7 @@ package com.vizyon.felis.form;
 
 import com.vizyon.felis.core.Table;
 import java.awt.Color;
+import javax.swing.JColorChooser;
 
 /**
  *
@@ -60,14 +61,19 @@ public class AddNewTableDialog extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel1.setText("Tablo Adı :");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel2.setText("Renk :");
 
         textTableColor.setBackground(new java.awt.Color(255, 102, 0));
         textTableColor.setEditable(false);
+        textTableColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textTableColorMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -134,6 +140,11 @@ public class AddNewTableDialog extends javax.swing.JDialog {
         table.getBox().setBgColor(textTableColor.getBackground());
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void textTableColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textTableColorMouseClicked
+        Color color = JColorChooser.showDialog(this, null, textTableColor.getBackground());
+        textTableColor.setBackground(color);
+    }//GEN-LAST:event_textTableColorMouseClicked
 
     /**
     * @param args the command line arguments

@@ -8,6 +8,7 @@ package com.vizyon.felis.core;
 
 
 import com.vizyon.felis.form.AddNewTableDialog;
+import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -17,7 +18,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -51,7 +54,14 @@ public class Screen extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 selectTable(e.getX(), e.getY());
                 if(e.getClickCount() == 2) {
-                    // Tablo uzunluğu kısalt ya da arttır
+                    if(selectedTable!=null) {
+                        if(selectedTable.isClosed()) {
+                            selectedTable.setClosed(false);
+                        }
+                        else {
+                            selectedTable.setClosed(true);
+                        }
+                    }
                 }
                 repaint();
             }
@@ -146,9 +156,10 @@ public class Screen extends JPanel {
         for(Table table : tables) {
             table.setSelected(false);
         }
+        selectedTable = null;
     }
 
-    public void reload() {
+    public void reloadScreen() {
         repaint();
     }
 
@@ -169,11 +180,46 @@ public class Screen extends JPanel {
                     Table table = tableDialog.createNewTable();
                     tables.add(table);
                     System.out.println("Menuye Geri Dondu");
-                    reload();
+                    reloadScreen();
                 }
             });
 
             add(newTable);
+
+            JMenu selected = new JMenu("Seçim");
+
+            JMenuItem editTable = new JMenuItem("Tabloyu Düzenle");
+            editTable.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if(selectedTable != null) {
+                        TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
+                        editDialog.setVisible(true);
+                        reloadScreen();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
+                    }
+                }
+            });
+
+            selected.add(editTable);
+
+            JMenuItem deleteTable = new JMenuItem("Tabloyu Sil");
+            deleteTable.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if(selectedTable != null) {
+                        tables.remove(selectedTable);
+                        selectedTable = null;
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lütfen Silmek İçin Bir Tablo Seçin!");
+                    }
+                    reloadScreen();
+                }
+            });
+            selected.add(deleteTable);
+
+            add(selected);
         }
     }
     //</editor-fold>
