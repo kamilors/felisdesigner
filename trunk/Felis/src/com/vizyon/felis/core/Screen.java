@@ -11,6 +11,7 @@ import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,6 +35,7 @@ public class Screen extends JPanel {
 
     private List<Table> tables; // Tablolar
     private Table selectedTable;
+   
 
     public Screen() {
         initScreen();
@@ -48,6 +50,7 @@ public class Screen extends JPanel {
         selectedTable = null;
         setComponentPopupMenu(new Menu());
         setFocusable(true);
+        setFocusTraversalKeysEnabled(true);
 
 
         // <editor-fold defaultstate="collapsed" desc="Mouse Listener">
@@ -65,6 +68,7 @@ public class Screen extends JPanel {
                         }
                     }
                 }
+
                 repaint();
             }
 
@@ -118,19 +122,42 @@ public class Screen extends JPanel {
             }
 
             public void keyReleased(KeyEvent ke) {
-                if(ke.getKeyCode() == KeyEvent.VK_F2) {
-                    if(selectedTable != null) {
+                if (selectedTable != null) {
+                    if (ke.getKeyCode() == KeyEvent.VK_F2) {
                         TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
                         editDialog.setVisible(true);
                         reloadScreen();
                     }
-                    else {
-                        JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
+                    else if(ke.getKeyCode() == KeyEvent.VK_DELETE) {
+                        tables.remove(selectedTable);
+                        selectedTable = null;
+                        reloadScreen();
+                    }
+                    else if(ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        deSelectAllTable();
+                        reloadScreen();
+                    }
+                    else if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
+                        selectedTable.getBox().setTop(selectedTable.getBox().getTop() + 15);
+                        reloadScreen();
+                    }
+                    else if(ke.getKeyCode() == KeyEvent.VK_UP) {
+                        selectedTable.getBox().setTop(selectedTable.getBox().getTop() - 15);
+                        reloadScreen();
+                    }
+                    else if(ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                        selectedTable.getBox().setLeft(selectedTable.getBox().getLeft() - 15);
+                        reloadScreen();
+                    }
+                    else if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        selectedTable.getBox().setLeft(selectedTable.getBox().getLeft() + 15);
+                        reloadScreen();
                     }
                 }
             }
         });
         //</editor-fold>
+
     }
     //</editor-fold>
 
@@ -196,7 +223,10 @@ public class Screen extends JPanel {
 
         public Menu() {
             initMenu();
+
         }
+
+
 
         public void initMenu() {
             JMenuItem newTable = new JMenuItem("Yeni Tablo Ekle");
