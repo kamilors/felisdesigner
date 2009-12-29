@@ -136,34 +136,44 @@ public class Relationship {
     }
 
     public int getPosition(Box from, Box to) {
+
+        if (from.getD().y + 200 < to.getB().y) {
+            return BOTTOM;
+        }
+
+        if (from.getB().y - 200 > to.getD().y) {
+            return TOP;
+        }
+        
         if(from.getC().x < to.getC().x) {
-            if(from.getA().x + 30 < to.getC().x) {
+
+            if(from.getC().x + 30 < to.getA().x) {
                 System.out.println("LEFT");
                 return LEFT;
             }
             else  {
                 if((from.getB().y > to.getD().y) ||(from.getB().y < to.getD().y && from.getB().y > to.getB().y)) {
-                    System.out.println("TOP");
+                    System.out.println("LEFT - TOP");
                     return TOP;
                 }
                 else {
-                    System.out.println("BOTTOM");
+                    System.out.println("LEFT - BOTTOM");
                     return BOTTOM;
                 }
             }
         }
         else {
-            if(from.getC().x + 30 < to.getA().x) {
+            if(from.getA().x > to.getC().x + 30) {
                 System.out.println("RIGHT");
                 return  RIGHT;
             }
             else {
                 if((from.getB().y > to.getD().y) ||(from.getB().y < to.getD().y && from.getB().y > to.getB().y)) {
-                    System.out.println("TOP");
+                    System.out.println("RIGHT - TOP");
                     return TOP;
                 }
                 else {
-                    System.out.println("BOTTOM");
+                    System.out.println("RIGHT - BOTTOM");
                     return BOTTOM;
                 }
             }
