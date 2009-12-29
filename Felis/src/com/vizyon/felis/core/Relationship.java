@@ -148,32 +148,26 @@ public class Relationship {
         if(from.getC().x < to.getC().x) {
 
             if(from.getC().x + 30 < to.getA().x) {
-                System.out.println("LEFT");
                 return LEFT;
             }
             else  {
                 if((from.getB().y > to.getD().y) ||(from.getB().y < to.getD().y && from.getB().y > to.getB().y)) {
-                    System.out.println("LEFT - TOP");
                     return TOP;
                 }
                 else {
-                    System.out.println("LEFT - BOTTOM");
                     return BOTTOM;
                 }
             }
         }
         else {
             if(from.getA().x > to.getC().x + 30) {
-                System.out.println("RIGHT");
                 return  RIGHT;
             }
             else {
                 if((from.getB().y > to.getD().y) ||(from.getB().y < to.getD().y && from.getB().y > to.getB().y)) {
-                    System.out.println("RIGHT - TOP");
                     return TOP;
                 }
                 else {
-                    System.out.println("RIGHT - BOTTOM");
                     return BOTTOM;
                 }
             }
