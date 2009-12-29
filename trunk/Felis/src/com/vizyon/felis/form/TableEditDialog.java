@@ -232,6 +232,7 @@ public class TableEditDialog extends javax.swing.JDialog {
            field.setType(new FieldType(FieldType.typeInt(model.getValueAt(i, 2).toString()), new Integer(model.getValueAt(i, 3).toString())));
            field.setNotNull(new Boolean(model.getValueAt(i, 4).toString()));
            field.setAutoIncrement(new Boolean(model.getValueAt(i, 5).toString()));
+           field.setTable(table);
            table.getFields().add(field);
        }
 

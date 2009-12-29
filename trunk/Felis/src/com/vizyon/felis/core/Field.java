@@ -17,6 +17,7 @@ import java.awt.RenderingHints;
  */
 public class Field {
 
+    private Table table;
     private String name;
     private FieldType type;
     private Box box;
@@ -30,12 +31,23 @@ public class Field {
         box.setHeight(20);
         box.setBgColor(Color.white);
         name = "field_name_long";
-        notNull = true;
+        notNull = false;
         autoIncrement = false;
         primaryKey = false;
     }
 
+
+
     // <editor-fold defaultstate="collapsed" desc="Getter And Setter">
+    
+    public Table getTable() {
+        return table;
+    }
+
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
     public Box getBox() {
         return box;
     }
