@@ -9,6 +9,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.RectangularShape;
 import java.awt.geom.RoundRectangle2D;
 
@@ -103,13 +104,40 @@ public class Box {
     }
 
     public int getRight() {
-        return width + left;
+        return getLeft() + getWidth();
     }
 
     public int getBottom() {
-        return height + top;
+        return getTop() + getHeight();
     }
 
+    public Point getA() {
+        Point point = new Point();
+        point.x = getLeft();
+        point.y = ((getBottom()-getTop())/2) + getTop();
+        return point;
+    }
+
+    public Point getC() {
+        Point point = new Point();
+        point.x = getRight();
+        point.y = ((getBottom()-getTop())/2) + getTop();
+        return point;
+    }
+
+    public Point getB() {
+        Point point = new Point();
+        point.x = ((getRight()-getLeft())/2) + getLeft();
+        point.y = getTop();
+        return point;
+    }
+
+    public Point getD() {
+        Point point = new Point();
+        point.x = ((getRight()-getLeft())/2) + getLeft();
+        point.y = getBottom();
+        return point;
+    }
 
     // </editor-fold>
 

@@ -10,6 +10,7 @@ package com.vizyon.felis.core;
 import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -30,7 +31,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -38,8 +38,19 @@ import javax.swing.filechooser.FileFilter;
  */
 public class Screen extends JPanel {
 
-    private List<Table> tables; // Tablolar
-    private Table selectedTable;
+    List<Table> tables; // Tablolar
+    Table selectedTable;
+
+    //İliskiler
+    Table fromTable;
+    Table toTable;
+
+    // Mouse
+    boolean mouseNormal;
+    boolean mouseHand;
+    boolean mouseOneToOne;
+    boolean mouseOneToMany;
+
    
 
     public Screen() {
@@ -57,19 +68,56 @@ public class Screen extends JPanel {
         setFocusable(true);
         setFocusTraversalKeysEnabled(true);
 
+        fromTable = null;
+        toTable = null;
+
+        mouseNormal = true;
+        mouseHand = false;
+        mouseOneToMany = false;
+        mouseOneToOne = false;
+
 
         // <editor-fold defaultstate="collapsed" desc="Mouse Listener">
         addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent e) {
-                selectTable(e.getX(), e.getY());
-                if(e.getClickCount() == 2) {
-                    if(selectedTable!=null) {
-                        if(selectedTable.isClosed()) {
-                            selectedTable.setClosed(false);
+
+                if(mouseNormal) {
+                    selectTable(e.getX(), e.getY());
+                    if(e.getClickCount() == 2) {
+                        if(selectedTable!=null) {
+                            if(selectedTable.isClosed()) {
+                                selectedTable.setClosed(false);
+                            }
+                            else {
+                                selectedTable.setClosed(true);
+                            }
+                        }
+                    }
+                }
+                else if(mouseOneToOne) {
+                    if(fromTable == null) {
+                        Table table = hasTable(e.getX(), e.getY());
+                        if(table != null) {
+                            fromTable = table;
                         }
                         else {
-                            selectedTable.setClosed(true);
+                            JOptionPane.showMessageDialog(null, "Bir Tablo Seçin!");
+                        }
+                    }
+                    else if(toTable == null) {
+                        Table table = hasTable(e.getX(), e.getY());
+                        if(table != null) {
+                            toTable = table;
+                            
+                            addOneToOneRelation();
+
+                            fromTable = null;
+                            toTable = null;
+                            setMouseNormal(true);
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null, "Bir Tablo Seçin!");
                         }
                     }
                 }
@@ -166,12 +214,19 @@ public class Screen extends JPanel {
     }
     //</editor-fold>
 
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
 
         // Izgarayı Çiz
         drawGrid(g);
+
+        for(Table table : tables) {
+            for(Relationship ship : table.getRelationships()) {
+                ship.draw(g);
+            }
+        }
 
         //Tabloları Çiz
         for(Table table : tables) {
@@ -223,6 +278,7 @@ public class Screen extends JPanel {
         repaint();
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Export To File">
     public void saveToPng() {
         try {
             JFileChooser fc = new JFileChooser();
@@ -242,6 +298,7 @@ public class Screen extends JPanel {
             System.out.println("HATA: " + e.getMessage());
         }
     }
+    //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Popup Menu">
     private class Menu extends JPopupMenu {
@@ -254,6 +311,9 @@ public class Screen extends JPanel {
 
 
         public void initMenu() {
+
+            JMenu actioner = new JMenu("İşlem");
+
             JMenuItem newTable = new JMenuItem("Yeni Tablo Ekle");
             newTable.addActionListener(new ActionListener() {
 
@@ -267,7 +327,31 @@ public class Screen extends JPanel {
                 }
             });
 
-            add(newTable);
+            actioner.add(newTable);
+
+            JMenuItem normal = new JMenuItem("Normal");
+            normal.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    setMouseNormal(true);
+                }
+            });
+            actioner.add(normal);
+
+            JMenuItem oneToOne = new JMenuItem("OneToOne ilişki ekle");
+            oneToOne.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    setMouseOneToOne(true);
+                }
+            });
+            actioner.add(oneToOne);
+
+            JMenuItem oneToMany = new JMenuItem("OneToMany ilişki Ekle");
+            JMenuItem hand = new JMenuItem("Modeli Taşı");
+
+
+            add(actioner);
+
+            
 
             JMenu selected = new JMenu("Seçim");
 
@@ -324,6 +408,108 @@ public class Screen extends JPanel {
             add(reload);
         }
     }
+
+
     //</editor-fold>
 
+
+    //<editor-fold desc="getter and setter">
+    public boolean isMouseHand() {
+        return mouseHand;
+    }
+
+    public void setMouseHand(boolean mouseHand) {
+        this.mouseHand = mouseHand;
+        if(mouseHand) {
+            mouseNormal = false;
+            mouseOneToMany = false;
+            mouseOneToOne = false;
+            toTable = null;
+            fromTable = null;
+        }
+    }
+
+    public boolean isMouseNormal() {
+        return mouseNormal;
+    }
+
+    public void setMouseNormal(boolean mouseNormal) {
+        this.mouseNormal = mouseNormal;
+        if(mouseNormal) {
+            mouseHand = false;
+            mouseOneToMany = false;
+            mouseOneToOne = false;
+            toTable = null;
+            fromTable = null;
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
+    public boolean isMouseOneToMany() {
+        return mouseOneToMany;
+    }
+
+    public void setMouseOneToMany(boolean mouseOneToMany) {
+        this.mouseOneToMany = mouseOneToMany;
+        if(mouseOneToMany) {
+            mouseHand = false;
+            mouseNormal = false;
+            mouseOneToOne = false;
+            toTable = null;
+            fromTable = null;
+        }
+    }
+
+    public boolean isMouseOneToOne() {
+        return mouseOneToOne;
+    }
+
+    public void setMouseOneToOne(boolean mouseOneToOne) {
+        this.mouseOneToOne = mouseOneToOne;
+        if(mouseOneToOne) {
+            mouseHand = false;
+            mouseNormal = false;
+            mouseOneToMany = false;
+            toTable = null;
+            fromTable = null;
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+    }
+    //</editor-fold>
+
+
+    private boolean addOneToOneRelation() {
+        Field toPrimary = getPrimaryField(toTable);
+        if(toPrimary == null) {
+            JOptionPane.showMessageDialog(this, "Seçtiğiniz Tablonun Birincil Anahtarı Yok!");
+            return false;
+        }
+
+        Field field = new Field();
+        field.setName(toTable.getName() + "_" + toPrimary.getName());
+        field.setType(new FieldType(toPrimary.getType().getType(), toPrimary.getType().getValue()));
+        field.setNotNull(true);
+        field.setTable(fromTable);
+
+        fromTable.getFields().add(field);
+
+        Relationship ship = new Relationship();
+        ship.setField(field);
+        ship.setToTable(toTable);
+        ship.setType(Relationship.ONE_TO_ONE);
+        ship.setName("fk_" + fromTable.getName() + "_" + toTable.getName() + "_" + toPrimary.getName());
+
+        fromTable.getRelationships().add(ship);
+        return true;
+    }
+
+    private Field getPrimaryField(Table table) {
+        for(Field field : table.getFields()) {
+            if(field.isPrimaryKey()) {
+                return field;
+            }
+        }
+
+        return null;
+    }
 }

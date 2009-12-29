@@ -11,7 +11,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ public class Table {
     private String name;    // Tablo adı ve Başlığı
     private Box box;    // Tablo Çizim Kutusu
     private List<Field> fields; // Tablo Alanları
+    private List<Relationship> relationships; // Tablo ilişkileri
     public Point dragDrop = new Point();
     private boolean selected;
     private boolean closed;
@@ -32,6 +35,7 @@ public class Table {
 
     public Table() {
         fields = new ArrayList<Field>(0);
+        relationships = new ArrayList<Relationship>(0);
         box = new Box();
         box.setRound(10);
         box.setBgColor(Color.orange);
@@ -87,7 +91,21 @@ public class Table {
         this.closed = closed;
     }
 
+    public boolean isAutoSize() {
+        return autoSize;
+    }
 
+    public void setAutoSize(boolean autoSize) {
+        this.autoSize = autoSize;
+    }
+
+    public List<Relationship> getRelationships() {
+        return relationships;
+    }
+
+    public void setRelationships(List<Relationship> relationships) {
+        this.relationships = relationships;
+    }
     // </editor-fold>
 
     public void draw(Graphics g) {
