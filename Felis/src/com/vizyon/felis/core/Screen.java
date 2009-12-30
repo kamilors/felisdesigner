@@ -9,6 +9,7 @@ package com.vizyon.felis.core;
 
 import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
+import com.vizyon.felis.util.FelisUtil;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.print.PrintException;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -377,14 +377,8 @@ public class Screen extends JPanel implements Printable {
 
             JMenuItem newTable = new JMenuItem("Yeni Tablo Ekle");
             newTable.addActionListener(new ActionListener() {
-
                 public void actionPerformed(ActionEvent e) {
-                    AddNewTableDialog tableDialog = new AddNewTableDialog(null, true);
-                    Table table = tableDialog.createNewTable();
-                    if(table != null) {
-                        tables.add(table);
-                    }
-                    reloadScreen();
+                    actionAddNewTable();
                 }
             });
 
@@ -427,14 +421,7 @@ public class Screen extends JPanel implements Printable {
             JMenuItem editTable = new JMenuItem("Tabloyu Düzenle");
             editTable.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if(selectedTable != null) {
-                        TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
-                        editDialog.setVisible(true);
-                        reloadScreen();
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
-                    }
+                    actionEditTable();
                 }
             });
 
@@ -504,7 +491,7 @@ public class Screen extends JPanel implements Printable {
             mouseOneToOne = false;
             toTable = null;
             fromTable = null;
-            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+            setCursor(FelisUtil.getHandCursor());
         }
     }
 
@@ -660,5 +647,24 @@ public class Screen extends JPanel implements Printable {
     public static void enableDoubleBuffering(Component c) {
         RepaintManager currentManager = RepaintManager.currentManager(c);
         currentManager.setDoubleBufferingEnabled(true);
+    }
+
+    public void actionAddNewTable() {
+        AddNewTableDialog tableDialog = new AddNewTableDialog(null, true);
+        Table table = tableDialog.createNewTable();
+        if (table != null) {
+            tables.add(table);
+        }
+        reloadScreen();
+    }
+
+    public void actionEditTable() {
+        if (selectedTable != null) {
+            TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
+            editDialog.setVisible(true);
+            reloadScreen();
+        } else {
+            JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
+        }
     }
 }

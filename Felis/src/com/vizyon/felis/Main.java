@@ -23,7 +23,7 @@ public class Main {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        Demo demo = new Demo();
+        FelisMain demo = new FelisMain();
         demo.setVisible(true);
         
     }
