@@ -23,12 +23,9 @@ public class Main {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        JFrame frame = new JFrame("Felis - Vizyon Yazılım");
-        frame.setSize(new Dimension(800, 600));
-        frame.add(new Screen());
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Demo demo = new Demo();
+        demo.setVisible(true);
+        
     }
 
     public static void setLookAndFeel() {

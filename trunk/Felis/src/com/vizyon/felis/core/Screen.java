@@ -10,9 +10,12 @@ package com.vizyon.felis.core;
 import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,25 +24,34 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.print.PrintException;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.RepaintManager;
 
 /**
  *
  * @author Kamil ÖRS
  */
-public class Screen extends JPanel {
+public class Screen extends JPanel implements Printable {
 
     List<Table> tables; // Tablolar
     Table selectedTable;
+    Point moveTo;
 
     //İliskiler
     Table fromTable;
@@ -67,6 +79,8 @@ public class Screen extends JPanel {
         setComponentPopupMenu(new Menu());
         setFocusable(true);
         setFocusTraversalKeysEnabled(true);
+
+        moveTo = new Point();
 
         fromTable = null;
         toTable = null;
@@ -126,6 +140,12 @@ public class Screen extends JPanel {
             }
 
             public void mousePressed(MouseEvent e) {
+                if(mouseHand) {
+                    moveTo.x = e.getX();
+                    moveTo.y = e.getY();
+                    return;
+                }
+
                 if(selectTable(e.getX(), e.getY())) {
                     selectedTable.dragDrop.x = e.getX() - selectedTable.getBox().getLeft();
                     selectedTable.dragDrop.y = e.getY() - selectedTable.getBox().getTop();
@@ -150,13 +170,34 @@ public class Screen extends JPanel {
         addMouseMotionListener(new MouseMotionListener() {
 
             public void mouseDragged(MouseEvent e) {
-                if(selectedTable != null) {
-                    if((e.getX() >= 10 && e.getX() <= getWidth() - 10) &&
-                            (e.getY() >= 10 && e.getY() <= getHeight() - 10)) {
-                        selectedTable.getBox().setLeft(e.getX() - selectedTable.dragDrop.x);
-                        selectedTable.getBox().setTop(e.getY() - selectedTable.dragDrop.y);
+
+                if(mouseHand) {
+                    if(getParent() != null) {
+                        JScrollPane pane = (JScrollPane) getParent().getParent();
+                        int x = -1 * (e.getX() - moveTo.x);
+                        int y = -1 * (e.getY() - moveTo.y);
+
+                        int sx = pane.getHorizontalScrollBar().getValue() + x;
+                        int sy = pane.getVerticalScrollBar().getValue() + y;
+
+                        pane.getHorizontalScrollBar().setValue(sx);
+                        pane.getVerticalScrollBar().setValue(sy);
+                        
                         repaint();
                     }
+                    return;
+                }
+
+                if(selectedTable != null) {
+                    int x = e.getX() - selectedTable.dragDrop.x;
+                    int y = e.getY() - selectedTable.dragDrop.y;
+                    
+                    if(x < 0) x = 0;
+                    if(y < 0) y = 0;
+                    
+                    selectedTable.getBox().setLeft(x);
+                    selectedTable.getBox().setTop(y);
+                    repaint();
                 }
             }
 
@@ -172,9 +213,18 @@ public class Screen extends JPanel {
             }
 
             public void keyPressed(KeyEvent ke) {
+                if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
+                    setMouseHand(true);
+                }
             }
 
             public void keyReleased(KeyEvent ke) {
+
+                if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
+                    setMouseNormal(true);
+                    return;
+                }
+
                 if (selectedTable != null) {
                     if (ke.getKeyCode() == KeyEvent.VK_F2) {
                         TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
@@ -234,6 +284,17 @@ public class Screen extends JPanel {
         }
     }
 
+    @Override
+    public void repaint() {
+        super.repaint();
+        setPreferredSize(getMaxWidthAndHeight());
+
+        if(getParent() != null) {
+            JScrollPane pane = (JScrollPane)getParent().getParent();
+            pane.updateUI();
+        }
+    }
+
     // Grid Çiz
     private void drawGrid(Graphics g) {
         g.setColor(new Color(235, 235, 235));
@@ -287,7 +348,7 @@ public class Screen extends JPanel {
             
             if(status == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                BufferedImage bi = new BufferedImage(getWidth(),getHeight(),BufferedImage.TYPE_INT_RGB);
+                BufferedImage bi = new BufferedImage(getPreferredSize().width,getPreferredSize().height,BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = bi.createGraphics();
                 paint(g2);
                 ImageIO.write(bi, "png", file);
@@ -346,7 +407,15 @@ public class Screen extends JPanel {
             actioner.add(oneToOne);
 
             JMenuItem oneToMany = new JMenuItem("OneToMany ilişki Ekle");
+
             JMenuItem hand = new JMenuItem("Modeli Taşı");
+            hand.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    setMouseHand(true);
+                }
+            });
+            actioner.add(hand);
+
 
 
             add(actioner);
@@ -398,6 +467,15 @@ public class Screen extends JPanel {
             export.add(exportPng);
             add(export);
 
+            JMenuItem printer = new JMenuItem("Yazdır");
+            printer.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    printOfPrinter();
+                }
+            });
+
+            add(printer);
+
             JMenuItem reload = new JMenuItem("Yenile");
             reload.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
@@ -426,6 +504,7 @@ public class Screen extends JPanel {
             mouseOneToOne = false;
             toTable = null;
             fromTable = null;
+            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
         }
     }
 
@@ -478,6 +557,38 @@ public class Screen extends JPanel {
     //</editor-fold>
 
 
+    // Tabloların konumlarına göre Max Width ve Hight getir.
+    private Dimension getMaxWidthAndHeight() {
+
+        Dimension dimension = new Dimension();
+
+        if(tables == null) {
+            dimension.setSize(0, 0);
+            return dimension;
+        }
+
+        if (tables.size() <= 0) {
+            dimension.setSize(0, 0);
+            return dimension;
+        }
+
+        int[] width = new int[tables.size()];
+        int[] heidth = new int[tables.size()];
+        int i = 0;
+        for (Table table : tables) {
+            width[i] = table.getBox().getRight();
+            heidth[i] = table.getBox().getBottom();
+            i++;
+        }
+        Arrays.sort(width);
+        Arrays.sort(heidth);
+        dimension.setSize(width[tables.size()-1] + 25, heidth[tables.size()-1] + 25);
+
+        return dimension;
+    }
+
+    
+
     private boolean addOneToOneRelation() {
         Field toPrimary = getPrimaryField(toTable);
         if(toPrimary == null) {
@@ -511,5 +622,43 @@ public class Screen extends JPanel {
         }
 
         return null;
+    }
+
+    public void printOfPrinter() {
+        PrinterJob printerJop = PrinterJob.getPrinterJob();
+        printerJop.setPrintable(this);
+        if(printerJop.printDialog()) {
+            try {
+                printerJop.print();
+            }
+            catch(PrinterException e) {
+                System.out.println("PRINTER ERROR: " + e);
+            }
+        }
+    }
+
+    @Override
+    public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
+        if(pageIndex > 0) {
+            return (NO_SUCH_PAGE);
+        }
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+        disableDoubleBuffering(this);
+        this.paint(g);
+        enableDoubleBuffering(this);
+
+        return(PAGE_EXISTS);
+    }
+
+    public static void disableDoubleBuffering(Component c) {
+        RepaintManager currentManager = RepaintManager.currentManager(c);
+        currentManager.setDoubleBufferingEnabled(false);
+    }
+
+    public static void enableDoubleBuffering(Component c) {
+        RepaintManager currentManager = RepaintManager.currentManager(c);
+        currentManager.setDoubleBufferingEnabled(true);
     }
 }
