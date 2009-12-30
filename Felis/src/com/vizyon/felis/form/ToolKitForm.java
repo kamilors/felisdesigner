@@ -111,6 +111,11 @@ public class ToolKitForm extends javax.swing.JFrame {
         addNewTable.setFocusable(false);
         addNewTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         addNewTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        addNewTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addNewTableMouseClicked(evt);
+            }
+        });
         toolBar.add(addNewTable);
         toolBar.add(jSeparator2);
 
@@ -166,6 +171,11 @@ public class ToolKitForm extends javax.swing.JFrame {
         screen.setMouseHand(true);
         setToggleSelection(move);
     }//GEN-LAST:event_moveMouseClicked
+
+    private void addNewTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addNewTableMouseClicked
+        screen.setMouseAddTable(true);
+        setToggleSelection(addNewTable);
+    }//GEN-LAST:event_addNewTableMouseClicked
 
     /**
     * @param args the command line arguments
