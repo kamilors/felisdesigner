@@ -13,6 +13,7 @@ package com.vizyon.felis.form;
 
 import com.vizyon.felis.core.Table;
 import java.awt.Color;
+import java.awt.Point;
 import javax.swing.JColorChooser;
 
 /**
@@ -22,6 +23,7 @@ import javax.swing.JColorChooser;
 public class AddNewTableDialog extends javax.swing.JDialog {
 
     private Table table;
+    private Point tableLocation;
 
     /** Creates new form AddNewTableDialog */
     public AddNewTableDialog(java.awt.Frame parent, boolean modal) {
@@ -32,7 +34,8 @@ public class AddNewTableDialog extends javax.swing.JDialog {
         table = null;
     }
 
-    public Table createNewTable() {
+    public Table createNewTable(int x, int y) {
+        tableLocation = new Point(x, y);
         setVisible(true);
         return table;
     }
@@ -142,6 +145,8 @@ public class AddNewTableDialog extends javax.swing.JDialog {
         table = new Table();
         table.setName(textTableName.getText());
         table.getBox().setBgColor(tableColorPalet.getBackground());
+        table.getBox().setLeft(tableLocation.x);
+        table.getBox().setTop(tableLocation.y);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -62,6 +62,7 @@ public class Screen extends JPanel implements Printable {
     boolean mouseHand;
     boolean mouseOneToOne;
     boolean mouseOneToMany;
+    boolean mouseAddTable;
 
    
 
@@ -89,6 +90,7 @@ public class Screen extends JPanel implements Printable {
         mouseHand = false;
         mouseOneToMany = false;
         mouseOneToOne = false;
+        mouseAddTable = false;
 
 
         // <editor-fold defaultstate="collapsed" desc="Mouse Listener">
@@ -134,6 +136,9 @@ public class Screen extends JPanel implements Printable {
                             JOptionPane.showMessageDialog(null, "Bir Tablo Seçin!");
                         }
                     }
+                }
+                else if(mouseAddTable) {
+                    actionAddNewTable(e.getX(), e.getY());
                 }
 
                 repaint();
@@ -373,49 +378,6 @@ public class Screen extends JPanel implements Printable {
 
         public void initMenu() {
 
-            JMenu actioner = new JMenu("İşlem");
-
-            JMenuItem newTable = new JMenuItem("Yeni Tablo Ekle");
-            newTable.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    actionAddNewTable();
-                }
-            });
-
-            actioner.add(newTable);
-
-            JMenuItem normal = new JMenuItem("Normal");
-            normal.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    setMouseNormal(true);
-                }
-            });
-            actioner.add(normal);
-
-            JMenuItem oneToOne = new JMenuItem("OneToOne ilişki ekle");
-            oneToOne.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    setMouseOneToOne(true);
-                }
-            });
-            actioner.add(oneToOne);
-
-            JMenuItem oneToMany = new JMenuItem("OneToMany ilişki Ekle");
-
-            JMenuItem hand = new JMenuItem("Modeli Taşı");
-            hand.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    setMouseHand(true);
-                }
-            });
-            actioner.add(hand);
-
-
-
-            add(actioner);
-
-            
-
             JMenu selected = new JMenu("Seçim");
 
             JMenuItem editTable = new JMenuItem("Tabloyu Düzenle");
@@ -541,6 +503,24 @@ public class Screen extends JPanel implements Printable {
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
     }
+
+    public boolean isMouseAddTable() {
+        return mouseAddTable;
+    }
+
+    public void setMouseAddTable(boolean mouseAddTable) {
+        this.mouseAddTable = mouseAddTable;
+        if(mouseAddTable) {
+            mouseHand = false;
+            mouseNormal = false;
+            mouseOneToMany = false;
+            toTable = null;
+            fromTable = null;
+        }
+    }
+
+
+
     //</editor-fold>
 
 
@@ -649,9 +629,9 @@ public class Screen extends JPanel implements Printable {
         currentManager.setDoubleBufferingEnabled(true);
     }
 
-    public void actionAddNewTable() {
+    public void actionAddNewTable(int x, int y) {
         AddNewTableDialog tableDialog = new AddNewTableDialog(null, true);
-        Table table = tableDialog.createNewTable();
+        Table table = tableDialog.createNewTable(x,y);
         if (table != null) {
             tables.add(table);
         }
