@@ -5,6 +5,14 @@
 
 package com.vizyon.felis.util;
 
+import java.awt.Cursor;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author kamil
@@ -44,4 +52,13 @@ public class FelisUtil {
         return arry;
     }
 
+    public static Cursor getHandCursor() {
+        FelisUtil util = new FelisUtil();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        ImageIcon icon = new ImageIcon(util.getClass().getResource("/com/vizyon/felis/icon/hand_32.png"));
+        toolkit.getBestCursorSize(16, 16);
+
+        Cursor cursor = toolkit.createCustomCursor(icon.getImage(), new Point(0, 0), "hand");
+        return cursor;
+    }
 }
