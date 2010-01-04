@@ -25,6 +25,7 @@ public class ToolKitForm extends javax.swing.JFrame {
 
     JFrame parent;
     Screen screen;
+    LocationListener locationListener;
 
     /** Creates new form ToolKitForm */
     public ToolKitForm() {
@@ -35,8 +36,8 @@ public class ToolKitForm extends javax.swing.JFrame {
         initComponents();
         this.parent = parent;
         this.screen = screen;
-        LocationListener listener = new LocationListener();
-        listener.start();
+        locationListener = new LocationListener();
+        locationListener.start();
     }
 
     /** This method is called from within the constructor to
@@ -77,6 +78,11 @@ public class ToolKitForm extends javax.swing.JFrame {
         lock.setFocusable(false);
         lock.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lock.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        lock.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lockMouseClicked(evt);
+            }
+        });
         toolBar.add(lock);
         toolBar.add(jSeparator4);
 
@@ -177,6 +183,11 @@ public class ToolKitForm extends javax.swing.JFrame {
         setToggleSelection(addNewTable);
     }//GEN-LAST:event_addNewTableMouseClicked
 
+    private void lockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lockMouseClicked
+       
+    }//GEN-LAST:event_lockMouseClicked
+
+
     /**
     * @param args the command line arguments
     */
@@ -241,4 +252,13 @@ public class ToolKitForm extends javax.swing.JFrame {
         }
     }
 
+    public  void selectNormalButton() {
+        normal.setSelected(true);
+        setToggleSelection(normal);
+    }
+
+    public void selectMoveButton() {
+        move.setSelected(true);
+        setToggleSelection(move);
+    }
 }

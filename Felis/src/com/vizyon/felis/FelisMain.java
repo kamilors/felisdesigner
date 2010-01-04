@@ -8,7 +8,6 @@ package com.vizyon.felis;
 import com.vizyon.felis.core.Screen;
 import com.vizyon.felis.form.ToolKitForm;
 import java.awt.BorderLayout;
-import java.awt.Event;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
@@ -45,6 +44,7 @@ public class FelisMain extends JFrame {
 
         toolForm = new ToolKitForm(this,screen);
         toolForm.setVisible(true);
+        screen.setToolKitForm(toolForm);
         
         windowListender();
 
@@ -81,6 +81,4 @@ public class FelisMain extends JFrame {
             }
         });
     }
-
-
 }
