@@ -9,6 +9,7 @@ package com.vizyon.felis.core;
 
 import com.vizyon.felis.form.AddNewTableDialog;
 import com.vizyon.felis.form.TableEditDialog;
+import com.vizyon.felis.form.ToolKitForm;
 import com.vizyon.felis.util.FelisUtil;
 import java.awt.Color;
 import java.awt.Component;
@@ -64,6 +65,7 @@ public class Screen extends JPanel implements Printable {
     boolean mouseOneToMany;
     boolean mouseAddTable;
 
+    private ToolKitForm toolKitForm;
    
 
     public Screen() {
@@ -220,6 +222,7 @@ public class Screen extends JPanel implements Printable {
             public void keyPressed(KeyEvent ke) {
                 if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
                     setMouseHand(true);
+                    toolKitForm.selectMoveButton();
                 }
             }
 
@@ -227,6 +230,7 @@ public class Screen extends JPanel implements Printable {
 
                 if(ke.getKeyCode() == KeyEvent.VK_SPACE) {
                     setMouseNormal(true);
+                    toolKitForm.selectNormalButton();
                     return;
                 }
 
@@ -451,6 +455,7 @@ public class Screen extends JPanel implements Printable {
             mouseNormal = false;
             mouseOneToMany = false;
             mouseOneToOne = false;
+            mouseAddTable = false;
             toTable = null;
             fromTable = null;
             setCursor(FelisUtil.getHandCursor());
@@ -467,6 +472,7 @@ public class Screen extends JPanel implements Printable {
             mouseHand = false;
             mouseOneToMany = false;
             mouseOneToOne = false;
+            mouseAddTable = false;
             toTable = null;
             fromTable = null;
             setCursor(Cursor.getDefaultCursor());
@@ -483,6 +489,7 @@ public class Screen extends JPanel implements Printable {
             mouseHand = false;
             mouseNormal = false;
             mouseOneToOne = false;
+            mouseAddTable = false;
             toTable = null;
             fromTable = null;
         }
@@ -498,6 +505,7 @@ public class Screen extends JPanel implements Printable {
             mouseHand = false;
             mouseNormal = false;
             mouseOneToMany = false;
+            mouseAddTable = false;
             toTable = null;
             fromTable = null;
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -519,7 +527,13 @@ public class Screen extends JPanel implements Printable {
         }
     }
 
+    public ToolKitForm getToolKitForm() {
+        return toolKitForm;
+    }
 
+    public void setToolKitForm(ToolKitForm toolKitForm) {
+        this.toolKitForm = toolKitForm;
+    }
 
     //</editor-fold>
 
@@ -635,6 +649,11 @@ public class Screen extends JPanel implements Printable {
         if (table != null) {
             tables.add(table);
         }
+
+        if(toolKitForm != null) {
+            toolKitForm.selectNormalButton();
+        }
+        setMouseNormal(true);
         reloadScreen();
     }
 
@@ -642,6 +661,7 @@ public class Screen extends JPanel implements Printable {
         if (selectedTable != null) {
             TableEditDialog editDialog = new TableEditDialog(null, true, selectedTable);
             editDialog.setVisible(true);
+            setMouseNormal(true);
             reloadScreen();
         } else {
             JOptionPane.showMessageDialog(null, "Lütfen Düzenlemek İçin Bir Tablo Seçin!");
