@@ -7,8 +7,7 @@ Felis, ilişkisel veritabanı tasarlama aracıdır. Görsel olarak tablolarını
 Java tabanlı olarak yazılmaktadır. Bileşenler Java2D api kullanılarak hazırlanmıştır. Hazırlanan diyagram şemasını xml olarak kayıt eder. 
 
 
-=Desteklenecek Veritabanları=
-
+ * PNG IMAGE
  * Java Entity Class (JPA,Hibernate)
  * MySQL
  * Oracle - YAPIM AŞAMASINDA
