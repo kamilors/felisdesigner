@@ -9,6 +9,7 @@ Java tabanlı olarak yazılmaktadır. Bileşenler Java2D api kullanılarak hazı
 
 =Desteklenecek Veritabanları=
 
+ * Java Entity Class (JPA,Hibernate)
  * MySQL
  * Oracle - YAPIM AŞAMASINDA
  * MSSQL  - YAPIM AŞAMASINDA
