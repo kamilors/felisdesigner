@@ -7,9 +7,7 @@
 
 package com.vizyon.felis;
 
-import com.vizyon.felis.core.Screen;
-import java.awt.Dimension;
-import javax.swing.JFrame;
+
 import javax.swing.UIManager;
 
 /**
@@ -25,7 +23,7 @@ public class Main {
         setLookAndFeel();
         FelisMain demo = new FelisMain();
         demo.setVisible(true);
-        
+   
     }
 
     public static void setLookAndFeel() {
