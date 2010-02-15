@@ -298,6 +298,7 @@ public class Screen extends JPanel implements Printable {
         super.repaint();
         setPreferredSize(getMaxWidthAndHeight());
 
+
         if(getParent() != null) {
             JScrollPane pane = (JScrollPane)getParent().getParent();
             pane.updateUI();
