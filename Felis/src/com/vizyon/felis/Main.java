@@ -17,12 +17,6 @@ import javax.swing.UIManager;
 public class Main {
 
     /**
-     *  Hello Kitty :)
-     *
-     *
-     */
-
-    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
