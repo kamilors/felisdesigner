@@ -2,7 +2,7 @@
  * Project : Felis
  * URL     : http://felis.vizyonyazilim.com
  * E-Mail  : kamil@vizyonyazilim.com
- * Desc    : Visual Database Designer
+ * Desc    : Visual Java Entity Bean Designer
  */
 
 package com.vizyon.felis;

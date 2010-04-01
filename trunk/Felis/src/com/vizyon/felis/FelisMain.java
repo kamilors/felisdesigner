@@ -24,7 +24,7 @@ public class FelisMain extends JFrame {
 
     public FelisMain() {
 
-        setTitle("Felis - Vizyon Yazilim");
+        setTitle("Felis - Java Entity Bean Desinger");
         setSize(800,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
